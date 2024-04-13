@@ -41,15 +41,13 @@
 #   max. 20 characters (includes trailing 0)
 #   this may be displayed during bootstrap
 #
-# The following example exactly fits on a 715 MB disk:
+# The following example exactly fits on a 900 MB disk:
 
-#0 * 0x0058      32   17919 "EOS32 root"
-
-0	*	0x0058	     32	  36344	"EOS32 root"
-1		0x0059	  36345	 167032	"EOS32 swap"
-2		0x0058	 167033	 247032	"EOS32 usr"
-3		0x0058	 247033	 255032	"EOS32 home"
-4	*	0x00A9	 255033	 767032	"NetBSD"
-5	*	0x0083	 767033	 787512	"Linux boot"
-6		0x0083	 787513	1401912	"Linux root"
-7		0x0082	1401913	1504312	"Linux swap"
+0  *  0x0058       32   122879  "EOS32 root"
+1     0x0059   122880   225279  "EOS32 swap"
+2     0x0058   225280   430079  "EOS32 usr"
+3     0x0058   430080   593919  "EOS32 home"
+4  *  0x00A9   593920  1105919  "NetBSD"
+5  *  0x0083  1105920  1126399  "Linux boot"
+6     0x0083  1126400  1740799  "Linux root"
+7     0x0082  1740800  1843199  "Linux swap"

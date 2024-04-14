@@ -1,5 +1,5 @@
 /*
- * mkdisk.c -- make an empty physical disk
+ * mkdisk.c -- make an empty 'physical' disk (sparse disk image file)
  */
 
 
@@ -7,10 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 
 #define SECTOR_SIZE		512
-#define MIN_NUMBER_SECTORS	100
+#define MIN_NUMBER_SECTORS	128
 #define SECTORS_PER_MB		((1 << 20) / SECTOR_SIZE)
 #define DATA_BYTE		0xE5
 
@@ -37,7 +39,7 @@ void usage(void) {
 
 
 int main(int argc, char *argv[]) {
-  FILE *dskFile;
+  int dskFile;
   int numSectors;
   unsigned char sectorBuffer[SECTOR_SIZE];
   int i;
@@ -54,8 +56,8 @@ int main(int argc, char *argv[]) {
     error("this disk is too small to be useful (minimum size is %d sectors)",
           MIN_NUMBER_SECTORS);
   }
-  dskFile = fopen(argv[1], "wb");
-  if (dskFile == NULL) {
+  dskFile = open(argv[1], O_CREAT | O_WRONLY, 0666);
+  if (dskFile < 0) {
     error("cannot open file '%s' for write", argv[1]);
   }
   fprintf(stdout,
@@ -65,11 +67,18 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < SECTOR_SIZE; i++) {
     sectorBuffer[i] = DATA_BYTE;
   }
-  for (i = 0; i < numSectors; i++) {
-    if (fwrite(sectorBuffer, SECTOR_SIZE, 1, dskFile) != 1) {
-      error("write error on file '%s', sector %d", argv[1], i);
-    }
+  if (lseek(dskFile, 0, SEEK_SET) < 0) {
+    error("cannot seek to begin of file '%s'", argv[1]);
   }
-  fclose(dskFile);
+  if (write(dskFile, sectorBuffer, SECTOR_SIZE) != SECTOR_SIZE) {
+    error("cannot write first sector of file '%s'", argv[1]);
+  }
+  if (lseek(dskFile, ((long) numSectors - 1) * SECTOR_SIZE, SEEK_SET) < 0) {
+    error("cannot seek to end of file '%s'", argv[1]);
+  }
+  if (write(dskFile, sectorBuffer, SECTOR_SIZE) != SECTOR_SIZE) {
+    error("cannot write last sector of file '%s'", argv[1]);
+  }
+  close(dskFile);
   return 0;
 }

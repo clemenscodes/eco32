@@ -12,9 +12,9 @@ int yylex(void);
 	char *string;
 	Tree tree;
 }
-%term TERMINAL
-%term START
-%term PPERCENT
+%token  TERMINAL
+%token  START
+%token  PPERCENT
 
 %token  <string>        ID TEMPLATE CODE
 %token  <n>             INT

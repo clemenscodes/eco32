@@ -29,10 +29,9 @@ static int      gl_tab();  /* forward reference needed for gl_tab_hook */
 #include <ctype.h>
 #include <errno.h>
 #include <signal.h>
+#include <stdlib.h>
 
-extern int      isatty();	
-extern void    *malloc();
-extern void     free();
+extern int      isatty(int fd);
 
 /********************* exported interface ********************************/
 

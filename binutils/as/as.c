@@ -255,12 +255,8 @@ void error(char *fmt, ...) {
     fclose(inFile);
     inFile = NULL;
   }
-  if (codeName != NULL) {
-    unlink(codeName);
-  }
-  if (dataName != NULL) {
-    unlink(dataName);
-  }
+  unlink(codeName);
+  unlink(dataName);
   if (outName != NULL) {
     unlink(outName);
   }
@@ -2507,11 +2503,7 @@ int main(int argc, char *argv[]) {
     fclose(outFile);
     outFile = NULL;
   }
-  if (codeName != NULL) {
-    unlink(codeName);
-  }
-  if (dataName != NULL) {
-    unlink(dataName);
-  }
+  unlink(codeName);
+  unlink(dataName);
   return 0;
 }

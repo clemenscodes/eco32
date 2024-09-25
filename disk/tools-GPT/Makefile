@@ -1,10 +1,10 @@
 #
-# Makefile for serial line disk server and basic disk tools
+# Makefile for basic disk tools
 #
 
-BUILD = ../build
+BUILD = ../../build
 
-DIRS = diskserv tools tools-GPT
+DIRS = mkdisk mkmboot mkgpt mkpart rmpart shgpt
 
 .PHONY:		all install clean
 
@@ -17,6 +17,8 @@ install:
 		for i in $(DIRS) ; do \
 		  $(MAKE) -C $$i install ; \
 		done
+		mkdir -p $(BUILD)/run-GPT
+		cp Makefile.run $(BUILD)/run-GPT/Makefile
 
 clean:
 		for i in $(DIRS) ; do \

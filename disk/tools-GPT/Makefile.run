@@ -1,0 +1,85 @@
+#
+# Makefile to build a bootable disk, and use it in one of four ways:
+#
+# 1. Start the simulator with an IDE disk interface (run-sim-dsk).
+#
+# 2. Start the simulator with an SD card interface (run-sim-sdc).
+#
+# 3. Start the simulator with a 'dangling' serial line to which
+#    the disk server can connect (run-sim-ser). Note that in this
+#    case you must start the disk server manually with the correct
+#    serial line device specified on the command line. The name of
+#    this pseudoterminal is shown during startup of the simulator.
+#    Let the server connect to the pseudoterminal before you start
+#    running the machine monitor.
+#
+# 4. Start the disk server alone to make the disk available over
+#    a real serial line for an FPGA board (run-server). Note that
+#    in this case SER_DEV must be set to the serial line device on
+#    which the disk server should wait for commands.
+#
+
+BUILD = ..
+
+SER_DEV = /dev/ttyUSB1
+DSK_IMG = disk.img
+DSK_SIZ = 902M
+RUN_LOG = run.log
+
+EOS32_FS   = 5A00
+EOS32_SWAP = 5B00
+NETBSD     = A900
+LINUX_FS   = 8300
+LINUX_SWAP = 8200
+
+EOS32_ROOT_SIZE = 60M
+EOS32_SWAP_SIZE = 50M
+EOS32_USR_SIZE  = 100M
+EOS32_HOME_SIZE = 80M
+NETBSD_SIZE     = 250M
+LINUX_BOOT_SIZE = 10M
+LINUX_ROOT_SIZE = 300M
+LINUX_SWAP_SIZE = 50M
+
+MKPT = $(BUILD)/bin/mkpart-GPT
+
+all:		$(DSK_IMG)
+
+run-sim-dsk:	$(DSK_IMG)
+		$(BUILD)/bin/sim -i -m 32 -c -s 2 -t 0 -t 1 \
+		  -r $(BUILD)/monitor/simulator/monitor.bin \
+		  -d $(DSK_IMG) -o $(RUN_LOG)
+
+run-sim-sdc:	$(DSK_IMG)
+		$(BUILD)/bin/sim -i -m 32 -c -s 2 -t 0 -t 1 \
+		  -r $(BUILD)/monitor/simulator/monitor.bin \
+		  -D $(DSK_IMG) -o $(RUN_LOG)
+
+run-sim-ser:	$(DSK_IMG)
+		$(BUILD)/bin/sim -i -m 32 -c -s 2 -t 0 \
+		  -r $(BUILD)/monitor/simulator/monitor.bin \
+		  -o $(RUN_LOG)
+
+run-server:	$(DSK_IMG)
+		$(BUILD)/bin/diskserv $(SER_DEV) $(DSK_IMG)
+
+$(DSK_IMG):
+		$(BUILD)/bin/mkdisk-GPT $(DSK_IMG) $(DSK_SIZ)
+		$(BUILD)/bin/mkgpt-GPT $(DSK_IMG) mboot1.bin mboot2.bin
+		$(MKPT) $(DSK_IMG) $(EOS32_FS)   $(EOS32_ROOT_SIZE)
+		$(MKPT) $(DSK_IMG) $(EOS32_SWAP) $(EOS32_SWAP_SIZE)
+		$(MKPT) $(DSK_IMG) $(EOS32_FS)   $(EOS32_USR_SIZE)
+		$(MKPT) $(DSK_IMG) $(EOS32_FS)   $(EOS32_HOME_SIZE)
+		$(MKPT) $(DSK_IMG) $(NETBSD)     $(NETBSD_SIZE)
+		$(MKPT) $(DSK_IMG) $(LINUX_FS)   $(LINUX_BOOT_SIZE)
+		$(MKPT) $(DSK_IMG) $(LINUX_FS)   $(LINUX_ROOT_SIZE)
+		$(MKPT) $(DSK_IMG) $(LINUX_SWAP) $(LINUX_SWAP_SIZE)
+		#$(MAKE) -C fs-EOS32 all
+		#$(MAKE) -C fs-NetBSD all
+		#$(MAKE) -C fs-Linux all
+
+clean:
+		#$(MAKE) -C fs-EOS32 clean
+		#$(MAKE) -C fs-NetBSD clean
+		#$(MAKE) -C fs-Linux clean
+		rm -f *~ $(DSK_IMG) $(RUN_LOG)

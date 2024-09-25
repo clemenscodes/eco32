@@ -15,6 +15,7 @@
 void boot(int dskno, Bool start) {
   Word capacity;
   Byte sig1, sig2;
+  Word instCheck;
 
   capacity = dskcap(dskno);
   if (capacity == 0) {
@@ -30,6 +31,15 @@ void boot(int dskno, Bool start) {
   sig2 = mmuReadByte(VIRT_BOOT + 512 - 1);
   if (sig1 != 0x55 || sig2 != 0xAA) {
     printf("MBR signature missing!\n");
+    return;
+  }
+  instCheck = 0;
+  instCheck |= mmuReadWord(VIRT_BOOT +  0);
+  instCheck |= mmuReadWord(VIRT_BOOT +  4);
+  instCheck |= mmuReadWord(VIRT_BOOT +  8);
+  instCheck |= mmuReadWord(VIRT_BOOT + 12);
+  if (instCheck == 0) {
+    printf("MBR lacks proper instructions in the first 4 words!\n");
     return;
   }
   /*

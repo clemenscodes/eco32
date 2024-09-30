@@ -1,0 +1,11 @@
+#
+# Makefile for writing the Linux partition image to disk
+#
+
+BUILD = ../..
+
+all:
+		$(BUILD)/bin/wrpart-GPT ../disk.img 6 pbr.bin
+
+clean:
+		rm -f *~

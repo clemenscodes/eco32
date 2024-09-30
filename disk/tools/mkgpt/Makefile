@@ -11,7 +11,7 @@ LDLIBS = -luuid -lm
 
 SRCS = mkgpt.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = mkgpt-GPT
+BIN = mkgpt
 
 .PHONY:		all install clean
 

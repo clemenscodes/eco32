@@ -17,8 +17,8 @@ install:
 		for i in $(DIRS) ; do \
 		  $(MAKE) -C $$i install ; \
 		done
-		mkdir -p $(BUILD)/run-GPT/fs-EOS32
-		cp Makefile.run $(BUILD)/run-GPT/fs-EOS32/Makefile
+		mkdir -p $(BUILD)/run/fs-EOS32
+		cp Makefile.run $(BUILD)/run/fs-EOS32/Makefile
 
 clean:
 		for i in $(DIRS) ; do \

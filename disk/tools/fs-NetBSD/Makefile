@@ -17,8 +17,8 @@ install:
 		for i in $(DIRS) ; do \
 		  $(MAKE) -C $$i install ; \
 		done
-		mkdir -p $(BUILD)/run-GPT/fs-NetBSD
-		cp Makefile.run $(BUILD)/run-GPT/fs-NetBSD/Makefile
+		mkdir -p $(BUILD)/run/fs-NetBSD
+		cp Makefile.run $(BUILD)/run/fs-NetBSD/Makefile
 
 clean:
 		for i in $(DIRS) ; do \

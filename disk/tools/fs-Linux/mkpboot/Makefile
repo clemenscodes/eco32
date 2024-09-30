@@ -9,8 +9,8 @@ BUILD = ../../../../build
 all:		pbr.bin
 
 install:	pbr.bin
-		mkdir -p $(BUILD)/run-GPT/fs-Linux
-		cp pbr.bin $(BUILD)/run-GPT/fs-Linux
+		mkdir -p $(BUILD)/run/fs-Linux
+		cp pbr.bin $(BUILD)/run/fs-Linux
 
 pbr.bin:	pbr
 		$(BUILD)/bin/load -p pbr pbr.bin

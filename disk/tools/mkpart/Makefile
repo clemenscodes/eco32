@@ -11,7 +11,7 @@ LDLIBS = -luuid -lm
 
 SRCS = mkpart.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = mkpart-GPT
+BIN = mkpart
 
 .PHONY:		all install clean
 

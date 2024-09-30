@@ -4,7 +4,7 @@
 
 BUILD = ../build
 
-DIRS = diskserv tools tools-GPT
+DIRS = diskserv tools
 
 .PHONY:		all install clean
 

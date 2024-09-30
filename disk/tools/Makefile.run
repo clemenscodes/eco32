@@ -42,7 +42,7 @@ LINUX_BOOT_SIZE = 10M
 LINUX_ROOT_SIZE = 300M
 LINUX_SWAP_SIZE = 50M
 
-MKPT = $(BUILD)/bin/mkpart-GPT
+MKPT = $(BUILD)/bin/mkpart
 
 all:		$(DSK_IMG)
 
@@ -65,8 +65,8 @@ run-server:	$(DSK_IMG)
 		$(BUILD)/bin/diskserv $(SER_DEV) $(DSK_IMG)
 
 $(DSK_IMG):
-		$(BUILD)/bin/mkdisk-GPT $(DSK_IMG) $(DSK_SIZ)
-		$(BUILD)/bin/mkgpt-GPT $(DSK_IMG) mboot1.bin mboot2.bin
+		$(BUILD)/bin/mkdisk $(DSK_IMG) $(DSK_SIZ)
+		$(BUILD)/bin/mkgpt $(DSK_IMG) mboot1.bin mboot2.bin
 		$(MKPT) $(DSK_IMG) $(EOS32_ROOT) $(EOS32_ROOT_SIZE) 1
 		$(MKPT) $(DSK_IMG) $(EOS32_SWAP) $(EOS32_SWAP_SIZE) 2
 		$(MKPT) $(DSK_IMG) $(EOS32_DATA) $(EOS32_USR_SIZE)  3

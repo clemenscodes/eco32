@@ -11,7 +11,7 @@ LDLIBS = -luuid -lm
 
 SRCS = shgpt.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = shgpt-GPT
+BIN = shgpt
 
 .PHONY:		all install clean
 

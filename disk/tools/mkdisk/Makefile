@@ -11,7 +11,7 @@ LDLIBS = -lm
 
 SRCS = mkdisk.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = mkdisk-GPT
+BIN = mkdisk
 
 .PHONY:		all install clean
 

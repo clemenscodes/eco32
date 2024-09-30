@@ -9,8 +9,8 @@ BUILD = ../../../../build
 all:		pbr.bin
 
 install:	pbr.bin
-		mkdir -p $(BUILD)/run-GPT/fs-EOS32
-		cp pbr.bin $(BUILD)/run-GPT/fs-EOS32
+		mkdir -p $(BUILD)/run/fs-EOS32
+		cp pbr.bin $(BUILD)/run/fs-EOS32
 
 pbr.bin:	pbr
 		$(BUILD)/bin/load -p pbr pbr.bin

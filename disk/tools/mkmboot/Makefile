@@ -9,9 +9,9 @@ BUILD = ../../../build
 all:		stage1/mboot1.bin stage2/mboot2.bin
 
 install:	stage1/mboot1.bin stage2/mboot2.bin
-		mkdir -p $(BUILD)/run-GPT
-		cp stage1/mboot1.bin $(BUILD)/run-GPT
-		cp stage2/mboot2.bin $(BUILD)/run-GPT
+		mkdir -p $(BUILD)/run
+		cp stage1/mboot1.bin $(BUILD)/run
+		cp stage2/mboot2.bin $(BUILD)/run
 
 stage1/mboot1.bin:
 		$(MAKE) -C stage1 all

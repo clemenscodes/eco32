@@ -11,7 +11,7 @@ LDLIBS = -luuid -lm
 
 SRCS = wrpart.c gpt.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = wrpart-GPT
+BIN = wrpart
 
 .PHONY:		all install clean
 

@@ -11,7 +11,7 @@ LDLIBS = -luuid -lm
 
 SRCS = rmpart.c
 OBJS = $(patsubst %.c,%.o,$(SRCS))
-BIN = rmpart-GPT
+BIN = rmpart
 
 .PHONY:		all install clean
 

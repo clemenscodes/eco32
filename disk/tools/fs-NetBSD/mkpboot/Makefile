@@ -9,8 +9,8 @@ BUILD = ../../../../build
 all:		pbr.bin
 
 install:	pbr.bin
-		mkdir -p $(BUILD)/run-GPT/fs-NetBSD
-		cp pbr.bin $(BUILD)/run-GPT/fs-NetBSD
+		mkdir -p $(BUILD)/run/fs-NetBSD
+		cp pbr.bin $(BUILD)/run/fs-NetBSD
 
 pbr.bin:	pbr
 		$(BUILD)/bin/load -p pbr pbr.bin

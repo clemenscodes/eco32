@@ -17,8 +17,8 @@ install:
 		for i in $(DIRS) ; do \
 		  $(MAKE) -C $$i install ; \
 		done
-		mkdir -p $(BUILD)/run-GPT/fs-Linux
-		cp Makefile.run $(BUILD)/run-GPT/fs-Linux/Makefile
+		mkdir -p $(BUILD)/run/fs-Linux
+		cp Makefile.run $(BUILD)/run/fs-Linux/Makefile
 
 clean:
 		for i in $(DIRS) ; do \

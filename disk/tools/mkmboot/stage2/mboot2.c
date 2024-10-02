@@ -15,6 +15,7 @@
 
 
 unsigned int bootDisk = 0;	/* gets loaded by previous stage */
+unsigned int bootPart = 0;	/* gets loaded by previous stage */
 unsigned int startSector = 0;	/* gets loaded by previous stage */
 unsigned int numSectors = 0;	/* gets loaded by previous stage */
 
@@ -307,6 +308,7 @@ int main(void) {
     break;
   }
   /* boot manager finished, now go executing loaded boot sector */
+  bootPart = part;
   startSector = partStart;
   numSectors = partSize;
   entryPoint = (unsigned int) LOAD_ADDR;

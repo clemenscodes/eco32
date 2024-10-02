@@ -45,12 +45,14 @@ void boot(int dskno, Bool start) {
   /*
    * Boot convention:
    *   $16  disk number of boot disk
-   *   $17  start sector number of disk or partition to boot
-   *   $18  total number of sectors of disk or partition to boot
+   *   $17  partition number to boot (0: whole disk)
+   *   $18  start sector number of disk or partition to boot
+   *   $19  total number of sectors of disk or partition to boot
    */
   cpuSetReg(16, dskno);
   cpuSetReg(17, 0);
-  cpuSetReg(18, capacity);
+  cpuSetReg(18, 0);
+  cpuSetReg(19, capacity);
   cpuSetPC(VIRT_BOOT);
   syncCaches();
   if (start) {

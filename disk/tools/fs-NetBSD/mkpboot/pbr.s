@@ -9,8 +9,9 @@
 ; it must run within 4K (code + data + stack).
 ;
 ; This code expects the disk number of the boot disk
-; in $16, the start sector of the disk or partition
-; to be booted in $17 and its size in $18.
+; in $16, the partition number to be booted in $17
+; (0 for the whole disk), the start sector of the disk
+; or partition to be booted in $18 and its size in $19.
 ;
 ; NOTE: THIS IS A FAKE PARTITION BOOT RECORD!
 ;       It doesn't load anything, but displays a message

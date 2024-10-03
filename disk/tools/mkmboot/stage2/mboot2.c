@@ -122,25 +122,66 @@ void printn(int n) {
 }
 
 
-void printf(char *fmt, ...) {
-  va_list ap;
+int countPrintu(unsigned long n, unsigned long b) {
+  unsigned long a;
+  int res;
+
+  res = 0;
+  a = n / b;
+  if (a != 0) {
+    res += countPrintu(a, b);
+  }
+  return res + 1;
+}
+
+
+void printu(unsigned long n, unsigned long b, int upperCase) {
+  unsigned long a;
+
+  a = n / b;
+  if (a != 0) {
+    printu(a, b, upperCase);
+  }
+  if (upperCase) {
+    putchar("0123456789ABCDEF"[n % b]);
+  } else {
+    putchar("0123456789abcdef"[n % b]);
+  }
+}
+
+
+void fill(int numFillers, char filler) {
+  while (numFillers-- > 0) {
+    putchar(filler);
+  }
+}
+
+
+void vprintf(char *fmt, va_list ap) {
   char c;
   int n;
+  long ln;
   unsigned int u;
+  unsigned long lu;
   char *s;
+  int negFlag;
   char filler;
-  int width, count, i;
+  int width, count;
 
-  va_start(ap, fmt);
   while (1) {
     while ((c = *fmt++) != '%') {
       if (c == '\0') {
-        va_end(ap);
         return;
       }
       putchar(c);
     }
     c = *fmt++;
+    if (c == '-') {
+      negFlag = 1;
+      c = *fmt++;
+    } else {
+      negFlag = 0;
+    }
     if (c == '0') {
       filler = '0';
       c = *fmt++;
@@ -148,23 +189,79 @@ void printf(char *fmt, ...) {
       filler = ' ';
     }
     width = 0;
-    if (c >= '0' && c <= '9') {
-      width = c - '0';
+    while (c >= '0' && c <= '9') {
+      width *= 10;
+      width += c - '0';
       c = *fmt++;
     }
     if (c == 'd') {
       n = va_arg(ap, int);
-      if (width > 0) {
-        count = countPrintn(n);
-        for (i = 0; i < width - count; i++) {
-          putchar(filler);
-        }
+      count = countPrintn(n);
+      if (width > 0 && !negFlag) {
+        fill(width - count, filler);
       }
       printn(n);
+      if (width > 0 && negFlag) {
+        fill(width - count, filler);
+      }
+    } else
+    if (c == 'u' || c == 'o' || c == 'x' || c == 'X') {
+      u = va_arg(ap, int);
+      count = countPrintu(u,
+                c == 'o' ? 8 : ((c == 'x' || c == 'X') ? 16 : 10));
+      if (width > 0 && !negFlag) {
+        fill(width - count, filler);
+      }
+      printu(u,
+             c == 'o' ? 8 : ((c == 'x' || c == 'X') ? 16 : 10),
+             c == 'X');
+      if (width > 0 && negFlag) {
+        fill(width - count, filler);
+      }
+    } else
+    if (c == 'l') {
+      c = *fmt++;
+      if (c == 'd') {
+        ln = va_arg(ap, long);
+        count = countPrintn(ln);
+        if (width > 0 && !negFlag) {
+          fill(width - count, filler);
+        }
+        printn(ln);
+        if (width > 0 && negFlag) {
+          fill(width - count, filler);
+        }
+      } else
+      if (c == 'u' || c == 'o' || c == 'x' || c == 'X') {
+        lu = va_arg(ap, long);
+        count = countPrintu(lu,
+                  c == 'o' ? 8 : ((c == 'x' || c == 'X') ? 16 : 10));
+        if (width > 0 && !negFlag) {
+          fill(width - count, filler);
+        }
+        printu(lu,
+               c == 'o' ? 8 : ((c == 'x' || c == 'X') ? 16 : 10),
+               c == 'X');
+        if (width > 0 && negFlag) {
+          fill(width - count, filler);
+        }
+      } else {
+        putchar('l');
+        putchar(c);
+      }
     } else
     if (c == 's') {
       s = va_arg(ap, char *);
-      puts(s);
+      count = strlen(s);
+      if (width > 0 && !negFlag) {
+        fill(width - count, filler);
+      }
+      while ((c = *s++) != '\0') {
+        putchar(c);
+      }
+      if (width > 0 && negFlag) {
+        fill(width - count, filler);
+      }
     } else
     if (c == 'c') {
       c = va_arg(ap, char);
@@ -173,6 +270,15 @@ void printf(char *fmt, ...) {
       putchar(c);
     }
   }
+}
+
+
+void printf(char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  vprintf(fmt, ap);
+  va_end(ap);
 }
 
 
@@ -245,21 +351,29 @@ int main(void) {
   while (1) {
     /* show partitions */
     printf("\nPartitions:\n");
-    printf("  # | description\n");
-    printf("----+----------------------\n");
+    printf("  # | start      | size       | description      \n");
+    printf("----+------------+------------+------------------\n");
     for (i = 0; i < 128; i++) {
       p = &partTbl[i * 128];
       if (isZero(p, 16)) {
         /* not used */
         continue;
       }
+      partStart = get4LE(p + 32);
+      partEnd = get4LE(p + 40);
+      partSize = partEnd - partStart + 1;
       printf("%3d | ", i + 1);
+      printf("0x%08X | 0x%08X | ", partStart, partSize);
       for (j = 0; j < 36; j++) {
         c = *(p + 56 + 2 * j);
         if (c == 0) {
           break;
         }
-        printf("%c", c);
+        if (c >= 0x20 && c < 0x7F) {
+          printf("%c", c);
+        } else {
+          printf(".");
+        }
       }
       printf("\n");
     }

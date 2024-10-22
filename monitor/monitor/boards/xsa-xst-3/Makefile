@@ -16,8 +16,8 @@ SRC = start.s \
       ../../common/mmu.c \
       ../../common/getline.c \
       ../../common/romlib.c \
-      ../../common/keyboard.s \
-      ../../kbdtbls/kbdtbls.s \
+      ../../common/keyboard.c \
+      ../../common/kbdtbls.s \
       ../../common/display.s \
       ../../common/serial.s \
       ../../common/dskctl.s \

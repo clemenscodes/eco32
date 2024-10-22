@@ -4,7 +4,7 @@
 
 BUILD = ../../build
 
-DIRS = copy kbdtbls boards
+DIRS = copy boards
 
 .PHONY:		all install clean
 

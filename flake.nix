@@ -24,7 +24,7 @@
     devShells = {
       ${system} = {
         default = pkgs.stdenvNoCC.mkDerivation {
-          name = "fuse-shell";
+          name = "eco32-shell";
           nativeBuildInputs = with pkgs; [
             pkg-config
           ];

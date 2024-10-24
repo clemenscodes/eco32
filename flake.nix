@@ -36,6 +36,8 @@
             ncurses
             libuuid
             verilog
+            xorg.libX11
+            xterm
           ];
         };
       };

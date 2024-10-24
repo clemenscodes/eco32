@@ -26,12 +26,12 @@ copy/copy.bin:	size.s
 		$(MAKE) -C copy all
 
 size.s:		dhry/dhry.bin
-		/bin/echo -e ";" >size.s
-		/bin/echo -e "; set number of bytes to be copied" >>size.s
-		/bin/echo -e ";" >>size.s
-		/bin/echo -e -n "\t.set\tsize," >>size.s
+		echo -e ";" >size.s
+		echo -e "; set number of bytes to be copied" >>size.s
+		echo -e ";" >>size.s
+		echo -e -n "\t.set\tsize," >>size.s
 		stat -c %s dhry/dhry.bin >>size.s
-		/bin/echo -e "\t.export\tsize" >>size.s
+		echo -e "\t.export\tsize" >>size.s
 
 dhry/dhry.bin:
 		$(MAKE) -C dhry all
